@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+<title>AppJS Project</title>
+<link rel="stylesheet" href="style.css">
+<script src="libs/jquery.js"></script>
+ 
+<style>
+ 
+</style>
+<script>
+$(function(){
+ 
+});
+</script>
+ 
+</head>
+ 
+<body>
+ 
+<!doctype html>
+<html>
+  <head>
+    <title>Teste</title>
+  </head>
+  <body>
+     <button onclick="iniciarAmostra()">Iniciar</button>
+<button onclick="pararAmostra()">Parar</button>
+
+<p id="info"></p>
+<p id="listaAmostra"></p>
+
+<div id="detalheAmostra" style="display: none"></div>
+
+     <script>
+     function CtipoExame (nome, tiporesult, rPos, rNor) {
+       this.nome = nome;
+       this.tiporesultado = tiporesult;
+       this.resultadopos = rPos;
+       this.resultadoNormal = rNor;
+     }
+     
+      <!-- Adiciona os tipos de exames possiveis -->
+     this.CtipoExame('Glicose',        'Numérico', '100/300', '150/250');
+     this.CtipoExame('HIV',            'Boolean',  'sim/não', 'sim');
+     this.CtipoExame('Creatinina',     'Numérico', '20/50',   '30/40');
+     this.CtipoExame('Triglicerídeos', 'Numérico', '200/500', '300/400');
+     
+     <!-- Adiciona as amostras -->
+     function CAmostra (numero) {
+         this.numero = numero ;
+         this.tipoexame = "aaa";
+         this.datacriacao = new Date();
+         this.resultado = "";
+         this.dataresultado = "";
+         this.getInfo = function() {
+                          return this.numero + ' ' + this.tipoexame;
+                        };
+       }
+     
+       var aux;
+       aux = 0;
+       var myVar = null;
+       
+       function adicionaAmostra() {
+         
+		 aux = aux + 1;
+         var Amostra = new CAmostra("A"+aux);
+         
+         document.getElementById("listaAmostra").innerHTML = document.getElementById("listaAmostra").innerHTML + '<li onmouseover="detalhesAmostra(Amostra)" onmouseout="limpaDetalhe()">' + Amostra.numero + '</li>';
+       }
+       
+       function pararAmostra() {
+         clearInterval(myVar);
+         document.getElementById("info").innerHTML = "Amostras Coletadas, Iniciando...";
+         
+       }
+       
+       function iniciarAmostra() {
+         pararAmostra();
+         aux = 0;
+         document.getElementById("listaAmostra").innerHTML = "";
+         myVar = setInterval(function () {adicionaAmostra()}, Math.floor((Math.random() * 2000) + 1000));
+         
+         document.getElementById("info").innerHTML = "Coletando Amostras...";
+       }
+       
+       function detalhesAmostra(varAmostra) {
+         document.getElementById('detalheAmostra').style.display = 'block';
+         document.getElementById('detalheAmostra').innerHTML = "Amostra: " + varAmostra
+         
+       
+       }
+       
+       function limpaDetalhe() {
+         document.getElementById('detalheAmostra').style.display = 'none';
+       }
+       
+       
+     </script>
+  </body>
+</html>
+ 
+</body>
+</html>

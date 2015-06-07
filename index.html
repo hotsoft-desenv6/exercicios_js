@@ -9,30 +9,24 @@
     <meta name="author" content="">
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <link href="css/main.css" rel="stylesheet">
 
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.css">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
 
-    <link href="css/exe_js.css" rel="stylesheet">
+    <link href="css/bootstrap.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]>
-    <script src="js/lib/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="js/lib/ie-emulation-modes-warning.js"></script>
+    <title>Exercício</title>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
 
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                aria-expanded="false" aria-controls="navbar">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -50,29 +44,33 @@
 </nav>
 
 <div class="container">
-<div class="span4">
-    <div class="painel-left">
-        <button type="button" class="btn-lg btn-primary" onclick="tom.move()">Adicionar Amostras</button>
-    </div>
+    <div class="span4">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Amostra adicionadas</h3>
+        <div class="row">
+            <div class="painel-left">
+                <button id="btnAdAmotra" type="button" class="btn-lg btn-primary">Adicionar Amostras</button>
+
+                <button id="btnTeste" type="button" class="btn-lg btn-primary">Testar</button>
+            </div>
         </div>
-        <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Amostra adicionadas</h3>
+            </div>
+            <div class="panel-body">
 
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Amostra em processo</h3>
+            </div>
+            <div class="panel-body">
+
+            </div>
         </div>
     </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Amostra em processo</h3>
-        </div>  
-        <div class="panel-body">
-
-        </div>
-    </div>
-</div>
 
 
 </div>
@@ -80,12 +78,13 @@
 
 <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="js/lib/jquery.js"></script>
-    <script src="js/exe_js.js"></script>
-    <script src="js/lib/bootstrap.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="js/lib/ie10-viewport-bug-workaround.js"></script>
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="js/ie10-viewport-bug-workaround.js"></script>
+
+<script src="src/main.js"></script>
 
 </body>
 </html>

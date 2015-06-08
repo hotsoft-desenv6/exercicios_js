@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
-    <link href="css/main.css" rel="stylesheet">
+    <link href="src/css/main.css" rel="stylesheet">
 
     <link href="css/bootstrap-theme.css">
     <link href="css/bootstrap-theme.min.css" rel="stylesheet">
@@ -55,16 +55,41 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Amostra adicionadas</h3>
+                <h3 class="panel-title">Lote Aberto</h3>
             </div>
             <div class="panel-body">
+                <div class="panel-info">
+                    <div class="panel-heading">
+                        <h4 id="loteNum" class="panel-title">Lote 1</h4>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Exame</th>
+                            </tr>
+                            </thead>
+                            <tbody id="loteAberto">
 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Amostra em processo</h3>
+                <h3 class="panel-title">Lote em processo</h3>
+            </div>
+            <div class="panel-body">
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Lotes processados</h3>
             </div>
             <div class="panel-body">
 
@@ -84,7 +109,7 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="js/ie10-viewport-bug-workaround.js"></script>
 
-<script src="src/main.js"></script>
+<script src="src/js/main.js"></script>
 
 </body>
 </html>

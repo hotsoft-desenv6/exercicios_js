@@ -1,3 +1,11 @@
+getId = (cod) ->
+  id = localStorage.getItem(cod)
+  if id == null
+    localStorage.setItem(cod, 0)
+    id = 0
+  localStorage.setItem(cod, parseInt(id) + 1)
+  id
+
 class Amostra
   constructor: (@exame, @valRef) ->
     dataCriacao = Date.now()
@@ -7,28 +15,18 @@ class Lote
   @emProcesso = {}
   @processado = {}
 
-  getNumLote = ->
-    numLote = localStorage.getItem('numLote')
-
-    if numLote == null
-      localStorage.setItem('numLote', 0)
-      numLote = 0
-
-    localStorage.setItem('numLote', parseInt(numLote) + 1)
-    numLote
-
   setStatus = (st) ->
     @status = st
 
 
   constructor: ->
     setStatus('CRIADO')
-    numlote = getNumLote()
+    numlote = getId('numlote')
     $('#painelLote').css('display', 'block')
     $('#loteNum').text('Lote: '+ numlote)
 
     scep = -> setStatus('EM PROCESSO')
-    setTimeout(scep , 2000)
+    setTimeout(scep , 5000)
 
 
 adiciona_amostra = ->

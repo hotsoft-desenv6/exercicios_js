@@ -1,6 +1,7 @@
 class Amostra
   constructor: (@exame, @valRef) ->
     dataCriacao = Date.now()
+    $('#loteAmostras').append('<tr><th>' + numAmostra + '</th><th>' + @exame + '</th>')
 
 class Lote
   @emProcesso = {}
@@ -18,13 +19,16 @@ class Lote
 
   setStatus = (st) ->
     @status = st
-    nlote = getNumLote()
-    $('#loteAberto').append('<tr><th>' + nlote + '</th><th>' + @status + '</th>')
+
 
   constructor: ->
-#    setStatus('CRIADO')
-    scep = -> setStatus('EMPROCESSO')
-    setInterval(scep , 2000)
+    setStatus('CRIADO')
+    numlote = getNumLote()
+    $('#painelLote').css('display', 'block')
+    $('#loteNum').text('Lote: '+ numlote)
+
+    scep = -> setStatus('EM PROCESSO')
+    setTimeout(scep , 2000)
 
 
 adiciona_amostra = ->

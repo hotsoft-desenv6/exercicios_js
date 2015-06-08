@@ -8,6 +8,7 @@
       this.exame = exame;
       this.valRef = valRef;
       dataCriacao = Date.now();
+      $('#loteAmostras').append('<tr><th>' + numAmostra + '</th><th>' + this.exame + '</th>');
     }
 
     return Amostra;
@@ -33,18 +34,19 @@
     };
 
     setStatus = function(st) {
-      var nlote;
-      this.status = st;
-      nlote = getNumLote();
-      return $('#loteAberto').append('<tr><th>' + nlote + '</th><th>' + this.status + '</th>');
+      return this.status = st;
     };
 
     function Lote() {
-      var scep;
+      var numlote, scep;
+      setStatus('CRIADO');
+      numlote = getNumLote();
+      $('#painelLote').css('display', 'block');
+      $('#loteNum').text('Lote: ' + numlote);
       scep = function() {
-        return setStatus('EMPROCESSO');
+        return setStatus('EM PROCESSO');
       };
-      setInterval(scep, 2000);
+      setTimeout(scep, 2000);
     }
 
     return Lote;

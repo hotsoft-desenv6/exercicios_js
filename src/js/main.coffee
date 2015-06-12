@@ -1,3 +1,6 @@
+resetStore = ->
+  localStorage.clear()
+
 getId = (cod) ->
   id = localStorage.getItem(cod)
   if id == null
@@ -7,17 +10,12 @@ getId = (cod) ->
   id
 
 class Amostra
-  constructor: (@exame, @valRef) ->
+  constructor: -> #(@exame, @valRef) ->
     dataCriacao = Date.now()
-    $('#loteAmostras').append('<tr><th>' + numAmostra + '</th><th>' + @exame + '</th>')
+    $('#loteAmostras').append('<tr><th>' + getId('numAmostra') + '</th><th>' + dataCriacao + '</th>')
 
 class Lote
-  @emProcesso = {}
-  @processado = {}
-
-  setStatus = (st) ->
-    @status = st
-
+  @Amostras = {}
 
   constructor: ->
     setStatus('CRIADO')
@@ -26,21 +24,31 @@ class Lote
     $('#loteNum').text('Lote: '+ numlote)
 
     scep = -> setStatus('EM PROCESSO')
+
     setTimeout(scep , 5000)
 
+  setStatus: (st) ->
+    @status = st
 
+  addAmostra: (am) ->
+    @Amostras.append(am)
+
+inicia = ->
+  setInterval(adiciona_amostra, 3000)
+
+@loteAberto = ''
 adiciona_amostra = ->
-  l = new Lote()
+  if @loteAberto == ''
+    @loteAberto = new Lote()
 
-resetStore = ->
-  localStorage.clear()
+  @loteAberto.addAmostra(new Amostra())
 
 
 ########################################################################################################################
 $(document).ready ->
 #  $('#btnTeste').on('click', $.proxy(cal.fire, this, 'abacate'))
   $('#btnTeste').click(resetStore)
-  $('#btnAdAmotra').click(adiciona_amostra)
+  $('#btnAdAmotra').click(inicia)
 
 
 

@@ -1,54 +1,81 @@
 resetStore = ->
-  localStorage.clear()
+    localStorage.clear()
+id = 0
 
 getId = (cod) ->
-  id = localStorage.getItem(cod)
-  if id == null
-    localStorage.setItem(cod, 0)
-    id = 0
-  localStorage.setItem(cod, parseInt(id) + 1)
-  id
+    id = id + 1
+###
+id = localStorage.getItem(cod)
+if id == null
+  id = 1
+  localStorage.setItem(cod, id)
+localStorage.setItem(cod, parseInt(id) + 1)
+id
+###
+class Base
+    constructor: (@ms, @func) ->
+        @exec_func()
 
-class Amostra
-  constructor: -> #(@exame, @valRef) ->
-    dataCriacao = Date.now()
-    $('#loteAmostras').append('<tr><th>' + getId('numAmostra') + '</th><th>' + dataCriacao + '</th>')
+    exec_func: ->
+        setTimeout =>
+            @p_func()
+        , @ms
 
-class Lote
-  @Amostras = {}
+    p_func: ->
+        @func()
 
-  constructor: ->
-    setStatus('CRIADO')
-    numlote = getId('numlote')
-    $('#painelLote').css('display', 'block')
-    $('#loteNum').text('Lote: '+ numlote)
+class Amostra #extends Base
+    constructor: ->
+        @dataCriacao = Date.now()
+        @idAmostra = getId('numAmostra')
 
-    scep = -> setStatus('EM PROCESSO')
+class Lote extends Base
+    amostras = []
 
-    setTimeout(scep , 5000)
+    constructor: ->
+        super
+        @numlote = getId('numlote')
+        @status ='CRIADO'
 
-  setStatus: (st) ->
-    @status = st
+    addAmostra: (am) ->
+        amostras.push(am)
+        console.log("Lote: #{@numlote} - Status: #{@status} - Amostra: #{ amostras[amostras.length-1].idAmostra}")
 
-  addAmostra: (am) ->
-    @Amostras.append(am)
+add_lote = ->
+    new Lote( 5000,
+        ->
+            loteAberto.status = 'EMPROCESSO'
+    )
+
+add_amostra = ->
+    new Amostra
+
+loteAberto = ''
+loteEmProcesso = []
+add_lote_amostra = ->
+    if loteAberto.status == 'EMPROCESSO'
+        loteEmProcesso.push(loteAberto)
+        console.log("Lote: #{loteEmProcesso[loteEmProcesso.length-1].numlote} - Status:
+                                        #{loteEmProcesso[loteEmProcesso.length-1].status}")
+        loteAberto = add_lote()
+
+    if loteAberto == ''
+        loteAberto = add_lote()
+
+    loteAberto.addAmostra(add_amostra())
 
 inicia = ->
-  setInterval(adiciona_amostra, 3000)
+    setInterval(add_lote_amostra, 1000)
 
-@loteAberto = ''
-adiciona_amostra = ->
-  if @loteAberto == ''
-    @loteAberto = new Lote()
-
-  @loteAberto.addAmostra(new Amostra())
-
+inicia()
 
 ########################################################################################################################
+
+###
+
 $(document).ready ->
 #  $('#btnTeste').on('click', $.proxy(cal.fire, this, 'abacate'))
-  $('#btnTeste').click(resetStore)
+  $('#btnZerar').click(resetStore)
   $('#btnAdAmotra').click(inicia)
 
-
-
+###

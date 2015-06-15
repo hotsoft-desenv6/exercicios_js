@@ -1,73 +1,87 @@
 resetStore = ->
     localStorage.clear()
-id = 0
 
 getId = (cod) ->
-    id = id + 1
-###
-id = localStorage.getItem(cod)
-if id == null
-  id = 1
-  localStorage.setItem(cod, id)
-localStorage.setItem(cod, parseInt(id) + 1)
-id
-###
-class Base
-    constructor: (@ms, @func) ->
-        @exec_func()
+    id = localStorage.getItem(cod)
+    if id == null
+        id = 1
+        localStorage.setItem(cod, id)
+    localStorage.setItem(cod, parseInt(id) + 1)
+    id
 
-    exec_func: ->
+EXAMES = [
+    {nome: 'Glicose', tipo: 'Numerico', result: [100..300], ref: [150..250]},
+    {nome: 'HIV', tipo: 'Boolean', result: [true, false], ref: false},
+    {nome: 'Creatinina', tipo: 'Numerico', result: [20..50], ref: [30..40]},
+    {nome: 'Triglicerideos', tipo: 'Numerico', result: [200..500], ref: [300..400]}
+]
+
+class Base
+    constructor: (@f, @ms) ->
+        @exec_f()
+
+    exec_f: ->
         setTimeout =>
             @p_func()
         , @ms
 
     p_func: ->
-        @func()
+        @f()
 
 class Amostra #extends Base
     constructor: ->
-        @dataCriacao = Date.now()
-        @idAmostra = getId('numAmostra')
+        @dataCriacao = Date()
+        @numamostra = getId('numAmostra')
+        @exame = EXAMES[Math.floor(Math.random() * 4)]
+        console.log(@exame.nome)
+
+    set_result: ->
+        @result = @exame.result[Math.floor(Math.random() * (@exame.result.length - 1))]
+        @alterado = @result not in @exame.ref
+
 
 class Lote extends Base
     amostras = []
-
     constructor: ->
         super
         @numlote = getId('numlote')
-        @status ='CRIADO'
+        @status = 'CRIADO'
 
     addAmostra: (am) ->
         amostras.push(am)
-        console.log("Lote: #{@numlote} - Status: #{@status} - Amostra: #{ amostras[amostras.length-1].idAmostra}")
 
-add_lote = ->
-    new Lote( 5000,
-        ->
-            loteAberto.status = 'EMPROCESSO'
-    )
+angular.module 'LoteApp', []
+.controller 'LoteAbertoCtrl', () ->
+    lotes = this
 
-add_amostra = ->
-    new Amostra
+    lotes.loteAberto = ''
+    lotes.loteEmProcesso = []
 
-loteAberto = ''
-loteEmProcesso = []
-add_lote_amostra = ->
-    if loteAberto.status == 'EMPROCESSO'
-        loteEmProcesso.push(loteAberto)
-        console.log("Lote: #{loteEmProcesso[loteEmProcesso.length-1].numlote} - Status:
-                                        #{loteEmProcesso[loteEmProcesso.length-1].status}")
-        loteAberto = add_lote()
+    add_lote = ->
+        new Lote ->
+            this.status = 'EMPROCESSO'
+        , 5000
 
-    if loteAberto == ''
-        loteAberto = add_lote()
+    add_amostra = ->
+        new Amostra
 
-    loteAberto.addAmostra(add_amostra())
+    lotes.add_lote_amostra = ->
+        if lotes.loteAberto.status == 'EMPROCESSO'
+            lotes.loteEmProcesso.push(lotes.loteAberto)
+            lotes.loteAberto = add_lote()
 
-inicia = ->
-    setInterval(add_lote_amostra, 1000)
+        if lotes.loteAberto == ''
+            lotes.loteAberto = add_lote()
 
-inicia()
+        lotes.loteAberto.addAmostra(add_amostra())
+        console.log(lotes.loteAberto.numlote)
+
+    lotes.inicia = ->
+        console.log('inicia')
+        setInterval(lotes.add_lote_amostra, 1000)
+
+
+
 
 ########################################################################################################################
 

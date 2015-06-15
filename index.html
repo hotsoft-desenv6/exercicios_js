@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="LoteApp">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
     <link href="src/css/main.css" rel="stylesheet">
 
-    <link href="css/bootstrap-theme.css">
-    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/angular.js"></script>
 
-    <link href="css/bootstrap.css">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!--<script src="js/angular.min.js"></script>-->
+    <script src="src/js/main.js"></script>
 
     <title>Exercício</title>
 
@@ -43,56 +42,63 @@
     </div>
 </nav>
 
-<div class="container">
+<div class="container" ng-controller="LoteAbertoCtrl as lotes">
     <div class="span4">
 
         <div class="row">
             <div class="painel-left">
-                <button id="btnAdAmotra" type="button" class="btn-lg btn-primary">Adicionar Amostras</button>
-
-                <button id="btnZerar" type="button" class="btn-lg btn-primary">Zerar</button>
+                <a href="" class="btn-lg btn-primary" ng-click="lotes.inicia()">Adicionar Amostras</a>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Lote Aberto</h3>
-            </div>
-            <div class="panel-body">
-                <div id="painelLote" class="panel-info"  style="display:none">
-                    <div id="loteAbertoInfo" class="panel-heading" >
-                        <h4 id="loteNum" class="panel-title"></h4>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-responsive">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Exame</th>
-                            </tr>
-                            </thead>
-                            <tbody id="loteAmostras">
-
-                            </tbody>
-                        </table>
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Lote Aberto</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="painelLote" class="panel-info" style="display:block">
+                        <div id="loteAbertoInfo" class="panel-heading">
+                            <h4 id="loteNum" class="panel-title">Lote: {{lotes.loteAberto.numlote}}</h4>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-responsive">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Exame</th>
+                                </tr>
+                                </thead>
+                                <tbody id="loteAmostras">
+                                <tr ng-repeat="a in lotes.loteAberto.amostras">
+                                    <td><strong>{{ a.numamostra }}</strong></td>
+                                    <td>{{ a.exame.nome }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Lote em processo</h3>
-            </div>
-            <div class="panel-body">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Lote em processo</h3>
+                </div>
+                <div class="panel-body">
 
+                </div>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Resultado Disponível</h3>
-            </div>
-            <div class="panel-body">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Resultado Disponível</h3>
+                </div>
+                <div class="panel-body">
 
+                </div>
             </div>
         </div>
     </div>
@@ -101,15 +107,6 @@
 </div>
 <!-- /.container -->
 
-<!-- Bootstrap core JavaScript
-    ================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="js/jquery.js"></script>
-<script src="js/bootstrap.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="js/ie10-viewport-bug-workaround.js"></script>
-
-<script src="main.js"></script>
 
 </body>
 </html>

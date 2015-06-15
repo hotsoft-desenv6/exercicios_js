@@ -16,73 +16,80 @@ EXAMES = [
     {nome: 'Triglicerideos', tipo: 'Numerico', result: [200..500], ref: [300..400]}
 ]
 
-class Amostra #extends Base
+class Amostra
     constructor: ->
-        @dataCriacao = Date()
+        @dataHoraCriacao = Date.now()
         @numamostra = getId('numAmostra')
         @exame = EXAMES[Math.floor(Math.random() * 4)]
-        console.log(@exame.nome)
 
     set_result: ->
         @result = @exame.result[Math.floor(Math.random() * (@exame.result.length - 1))]
         @alterado = @result not in @exame.ref
+        @dataHoraResultado = Date.now()
 
 
-class Lote #extends Base
-    amostras = []
+class Lote
     constructor: ->
-        @timeout()
+        @timeout_status()
+        @amostras = []
         @numlote = getId('numlote')
         @status = 'CRIADO'
 
     addAmostra: (am) ->
-        amostras.push(am)
+        @amostras.push(am)
 
-    timeout: ->
+    timeout_status: ->
         setTimeout =>
             @set_status()
-        , 5000
+        , 18000
 
     set_status: ->
-        if this.status == 'CRIADO'
-            this.status = 'EMPROCESSO'
+        if @status == 'CRIADO'
+            @status = 'EMPROCESSO'
         @processa_amostra()
 
-    processa_amostra: ->
-        #todo: processaar amostras e retornar a processa_amostra
+    processa_amostra: (i) ->
+        if i >= @amostras.length
+            @timeout_amostra(i)
+        else
+            @status = 'PRONTO'
+            processa_lote()
 
+    timeout_amostra: () ->
+        setTimeout ->
+            @amostras[i].set_result()
+            @processa_amostra(i+1)
+        , Math.floor(Math.random()*7000)
 
+loteAberto = ''
+loteEmProcesso = []
+lotesProntos = []
 
+processa_lote = ->
+    for l in loteEmProcesso
+        if l.status == 'PRONTO'
+            lotesProntos.push(l)
+            loteEmProcesso.pop(l)
 
-angular.module 'LoteApp', []
-.controller 'LoteAbertoCtrl', () ->
-    lotes = this
+add_amostra = ->
+    new Amostra
 
-    lotes.loteAberto = ''
-    lotes.loteEmProcesso = []
+add_lote = ->
+    new Lote
 
-    add_lote = -> new Lote
+add_lote_amostra = ->
+    if loteAberto.status == 'EMPROCESSO'
+        loteEmProcesso.push(loteAberto)
+        loteAberto = add_lote()
 
-    add_amostra = ->
-        new Amostra
+    if loteAberto == ''
+        loteAberto = add_lote()
 
-    lotes.add_lote_amostra = ->
-        if lotes.loteAberto.status == 'EMPROCESSO'
-            lotes.loteEmProcesso.push(lotes.loteAberto)
-            lotes.loteAberto = add_lote()
+    setTimeout(add_lote_amostra, Math.floor(Math.random() * 7000))
+    console.log("#{loteAberto.numlote} - #{loteAberto.status} - #{loteAberto.amostras[loteAberto.amostras.length-1].exame.nome}")
+    loteAberto.addAmostra add_amostra()
 
-        if lotes.loteAberto == ''
-            lotes.loteAberto = add_lote()
-
-        lotes.loteAberto.addAmostra(add_amostra())
-
-        setTimeout(lotes.add_lote_amostra(), Math.floor(Math.random() * 7000))
-
-        console.log(lotes.loteAberto.numlote)
-
-    lotes.add_lote_amostra()
-
-
+add_lote_amostra()
 
 
 ########################################################################################################################

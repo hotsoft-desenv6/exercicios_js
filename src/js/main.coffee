@@ -16,18 +16,6 @@ EXAMES = [
     {nome: 'Triglicerideos', tipo: 'Numerico', result: [200..500], ref: [300..400]}
 ]
 
-class Base
-    constructor: (@f, @ms) ->
-        @exec_f()
-
-    exec_f: ->
-        setTimeout =>
-            @p_func()
-        , @ms
-
-    p_func: ->
-        @f()
-
 class Amostra #extends Base
     constructor: ->
         @dataCriacao = Date()
@@ -40,15 +28,31 @@ class Amostra #extends Base
         @alterado = @result not in @exame.ref
 
 
-class Lote extends Base
+class Lote #extends Base
     amostras = []
     constructor: ->
-        super
+        @timeout()
         @numlote = getId('numlote')
         @status = 'CRIADO'
 
     addAmostra: (am) ->
         amostras.push(am)
+
+    timeout: ->
+        setTimeout =>
+            @set_status()
+        , 5000
+
+    set_status: ->
+        if this.status == 'CRIADO'
+            this.status = 'EMPROCESSO'
+        @processa_amostra()
+
+    processa_amostra: ->
+        #todo: processaar amostras e retornar a processa_amostra
+
+
+
 
 angular.module 'LoteApp', []
 .controller 'LoteAbertoCtrl', () ->
@@ -57,10 +61,7 @@ angular.module 'LoteApp', []
     lotes.loteAberto = ''
     lotes.loteEmProcesso = []
 
-    add_lote = ->
-        new Lote ->
-            this.status = 'EMPROCESSO'
-        , 5000
+    add_lote = -> new Lote
 
     add_amostra = ->
         new Amostra
@@ -74,11 +75,12 @@ angular.module 'LoteApp', []
             lotes.loteAberto = add_lote()
 
         lotes.loteAberto.addAmostra(add_amostra())
+
+        setTimeout(lotes.add_lote_amostra(), Math.floor(Math.random() * 7000))
+
         console.log(lotes.loteAberto.numlote)
 
-    lotes.inicia = ->
-        console.log('inicia')
-        setInterval(lotes.add_lote_amostra, 1000)
+    lotes.add_lote_amostra()
 
 
 

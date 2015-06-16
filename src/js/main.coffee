@@ -29,7 +29,7 @@ class Amostra
 
 
 class Lote
-    constructor: ->
+    constructor: (@func) ->
         @timeout_status()
         @amostras = []
         @numlote = getId('numlote')
@@ -53,7 +53,10 @@ class Lote
             @timeout_amostra(i)
         else
             @status = 'PRONTO'
-            processa_lote()
+            @processa_lote()
+
+    processa_lote: ->
+        @func
 
     timeout_amostra: () ->
         setTimeout ->
@@ -63,22 +66,21 @@ class Lote
 
 
 angular.module 'LoteApp', []
-.controller 'LoteAbertoCtrl', () ->
+.controller 'LoteCtrl', () ->
     lotes = this
 
     lotes.loteAberto = ''
     lotes.lotesEmProcesso = []
-	lotes.lotesProntos = []
+    lotes.lotesProntos = []
 
     lotes.processa_lote = ->
-    	for l in lotes.loteEmProcesso
-        	if l.status == 'PRONTO'
-            	lotes.lotesProntos.push(l)
-            	lotes.loteEmProcesso.pop(l)
-
+    	for l in lotes.lotesEmProcesso
+            console.log('lote em processo: ' +l.numlote)
+            lotes.lotesProntos.push(l)
+            lotes.lotesEmProcesso.pop(l)
 
     lotes.add_lote = ->
-        new Lote
+        new Lote lotes.processa_lote
 
     lotes.add_amostra = ->
         new Amostra
@@ -94,6 +96,7 @@ angular.module 'LoteApp', []
         lotes.loteAberto.addAmostra(lotes.add_amostra())
 
         setTimeout(lotes.add_lote_amostra, Math.floor(Math.random() * 7000))
+        console.log(lotes.loteAberto.numlote)
 
 
     lotes.add_lote_amostra()

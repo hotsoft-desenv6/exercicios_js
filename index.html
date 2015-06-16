@@ -6,8 +6,8 @@
 
     <link href="src/css/main.css" rel="stylesheet">
 
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <!--<script src="js/jquery.js"></script>-->
+    <!--<script src="js/bootstrap.js"></script>-->
     <script src="js/angular.js"></script>
 
     <link href="css/bootstrap-theme.min.css" rel="stylesheet">
@@ -47,7 +47,7 @@
 
         <div class="row">
             <div class="painel-left">
-                <a href="" class="btn-lg btn-primary" ng-click="lotes.inicia()">Adicionar Amostras</a>
+                <a href="" class="btn-lg btn-primary" ng-click="lotes.add_lote_amostra()">Adicionar Amostras</a>
             </div>
         </div>
         <div class="row">
@@ -87,7 +87,29 @@
                     <h3 class="panel-title">Lote em processo</h3>
                 </div>
                 <div class="panel-body">
-
+                    <div ng-repeat="lp in lotes.lotesEmProcesso">
+                        <div id="painelLoteProcesso" class="panel-info" style="display:block">
+                            <div id="loteEmProcessoInfo" class="panel-heading">
+                                <h4  class="panel-title">Lote: {{lp.numlote}}</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-responsive">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Exame</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="loteAmostras">
+                                    <tr ng-repeat="a in lp.amostras">
+                                        <td><strong>{{ a.numamostra }}</strong></td>
+                                        <td>{{ a.exame.nome }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

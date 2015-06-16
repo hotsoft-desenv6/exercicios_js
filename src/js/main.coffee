@@ -16,27 +16,26 @@ EXAMES = [
     {nome: 'Triglicerideos', tipo: 'Numerico', result: [200..500], ref: [300..400]}
 ]
 
-class Amostra #extends Base
+class Amostra
     constructor: ->
         @dataCriacao = Date()
         @numamostra = getId('numAmostra')
         @exame = EXAMES[Math.floor(Math.random() * 4)]
-        console.log(@exame.nome)
 
     set_result: ->
         @result = @exame.result[Math.floor(Math.random() * (@exame.result.length - 1))]
         @alterado = @result not in @exame.ref
 
 
-class Lote #extends Base
-    amostras = []
+class Lote
     constructor: ->
         @timeout()
+        @amostras = []
         @numlote = getId('numlote')
         @status = 'CRIADO'
 
     addAmostra: (am) ->
-        amostras.push(am)
+        @amostras.push(am)
 
     timeout: ->
         setTimeout =>
@@ -49,9 +48,7 @@ class Lote #extends Base
         @processa_amostra()
 
     processa_amostra: ->
-        #todo: processaar amostras e retornar a processa_amostra
-
-
+#todo: processaar amostras e retornar a processa_amostra
 
 
 angular.module 'LoteApp', []
@@ -59,30 +56,28 @@ angular.module 'LoteApp', []
     lotes = this
 
     lotes.loteAberto = ''
-    lotes.loteEmProcesso = []
+    lotes.lotesEmProcesso = []
 
-    add_lote = -> new Lote
+    lotes.add_lote = ->
+        new Lote
 
-    add_amostra = ->
+    lotes.add_amostra = ->
         new Amostra
 
     lotes.add_lote_amostra = ->
         if lotes.loteAberto.status == 'EMPROCESSO'
-            lotes.loteEmProcesso.push(lotes.loteAberto)
-            lotes.loteAberto = add_lote()
+            lotes.lotesEmProcesso.push(lotes.loteAberto)
+            lotes.loteAberto = lotes.add_lote()
 
         if lotes.loteAberto == ''
-            lotes.loteAberto = add_lote()
+            lotes.loteAberto = lotes.add_lote()
 
-        lotes.loteAberto.addAmostra(add_amostra())
+        lotes.loteAberto.addAmostra(lotes.add_amostra())
 
-        setTimeout(lotes.add_lote_amostra(), Math.floor(Math.random() * 7000))
+        setTimeout(lotes.add_lote_amostra, Math.floor(Math.random() * 7000))
 
-        console.log(lotes.loteAberto.numlote)
 
     lotes.add_lote_amostra()
-
-
 
 
 ########################################################################################################################

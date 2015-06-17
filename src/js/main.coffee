@@ -53,6 +53,7 @@ class Lote
             @timeout_amostra(i)
         else
             @status = 'PRONTO'
+            console.log("pronto - #{@numlote}")
             @processa_lote()
 
     processa_lote: ->
@@ -64,42 +65,43 @@ class Lote
             @processa_amostra(i+1)
         , Math.floor(Math.random()*7000)
 
-
+###
 angular.module 'LoteApp', []
 .controller 'LoteCtrl', () ->
     lotes = this
+###
 
-    lotes.loteAberto = ''
-    lotes.lotesEmProcesso = []
-    lotes.lotesProntos = []
+loteAberto = ''
+lotesEmProcesso = []
+lotesProntos = []
 
-    lotes.processa_lote = ->
-    	for l in lotes.lotesEmProcesso
-            console.log('lote em processo: ' +l.numlote)
-            lotes.lotesProntos.push(l)
-            lotes.lotesEmProcesso.pop(l)
+processa_lote = ->
+    for l in lotesEmProcesso
+        console.log('lote em processo: ' +l.numlote)
+        lotesProntos.push(l)
+        lotesEmProcesso.pop(l)
 
-    lotes.add_lote = ->
-        new Lote lotes.processa_lote
+add_lote = ->
+    new Lote processa_lote
 
-    lotes.add_amostra = ->
-        new Amostra
+add_amostra = ->
+    new Amostra
 
-    lotes.add_lote_amostra = ->
-        if lotes.loteAberto.status == 'EMPROCESSO'
-            lotes.lotesEmProcesso.push(lotes.loteAberto)
-            lotes.loteAberto = lotes.add_lote()
+add_lote_amostra = ->
+    if loteAberto.status == 'EMPROCESSO'
+        lotesEmProcesso.push(loteAberto)
+        loteAberto = add_lote()
 
-        if lotes.loteAberto == ''
-            lotes.loteAberto = lotes.add_lote()
+    if loteAberto == ''
+        loteAberto = add_lote()
 
-        lotes.loteAberto.addAmostra(lotes.add_amostra())
+    loteAberto.addAmostra(add_amostra())
 
-        setTimeout(lotes.add_lote_amostra, Math.floor(Math.random() * 7000))
-        console.log(lotes.loteAberto.numlote)
+    setTimeout(add_lote_amostra, Math.floor(Math.random() * 7000))
+    conslole.log(loteAberto.numlote)
 
 
-    lotes.add_lote_amostra()
+add_lote_amostra()
 
 ########################################################################################################################
 

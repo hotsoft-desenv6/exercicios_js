@@ -109,6 +109,7 @@
     };
 
     Lote.prototype.processa_amostra = function(i) {
+      console.log(i + ' - ' + this.amostras.length);
       if (i >= this.amostras.length) {
         return this.timeout_amostra(i);
       } else {
@@ -176,7 +177,7 @@
     }
     loteAberto.addAmostra(add_amostra());
     setTimeout(add_lote_amostra, Math.floor(Math.random() * 7000));
-    return conslole.log(loteAberto.numlote);
+    return console.log(loteAberto.numlote);
   };
 
   add_lote_amostra();

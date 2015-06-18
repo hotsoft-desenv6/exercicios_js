@@ -49,6 +49,7 @@ class Lote
         @processa_amostra()
 
     processa_amostra: (i) ->
+        console.log( i + ' - ' + @amostras.length)
         if i >= @amostras.length
             @timeout_amostra(i)
         else
@@ -98,7 +99,7 @@ add_lote_amostra = ->
     loteAberto.addAmostra(add_amostra())
 
     setTimeout(add_lote_amostra, Math.floor(Math.random() * 7000))
-    conslole.log(loteAberto.numlote)
+    console.log(loteAberto.numlote)
 
 
 add_lote_amostra()

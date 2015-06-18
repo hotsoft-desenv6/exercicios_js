@@ -26,9 +26,11 @@ class Amostra
         @result = @exame.result[Math.floor(Math.random() * (@exame.result.length - 1))]
         @alterado = @result not in @exame.ref
         @dataHoraResultado = Date.now()
+        console.log("Amostra: #{@numamostra} - Exame: #{@exame.nome} - Res: #{@result} - Alterasdo: #{@alterado}")
 
 
 class Lote
+    this.a = 0
     constructor: (@func) ->
         @timeout_status()
         @amostras = []
@@ -46,12 +48,19 @@ class Lote
     set_status: ->
         if @status == 'CRIADO'
             @status = 'EMPROCESSO'
+            console.log("em processo - #{@numlote}")
         @processa_amostra()
 
-    processa_amostra: (i) ->
-        console.log( i + ' - ' + @amostras.length)
-        if i >= @amostras.length
-            @timeout_amostra(i)
+    processa_amostra: ->
+        console.log( @a + ' - ' + @amostras.length)
+        console.log( @a <= @amostras.length)
+
+        if @a <= @amostras.length
+            setTimeout ->
+                @amostras[@a].set_result()
+                @processa_amostra
+                @a++
+            , Math.floor(Math.random()*7000)
         else
             @status = 'PRONTO'
             console.log("pronto - #{@numlote}")
@@ -60,17 +69,6 @@ class Lote
     processa_lote: ->
         @func
 
-    timeout_amostra: () ->
-        setTimeout ->
-            @amostras[i].set_result()
-            @processa_amostra(i+1)
-        , Math.floor(Math.random()*7000)
-
-###
-angular.module 'LoteApp', []
-.controller 'LoteCtrl', () ->
-    lotes = this
-###
 
 loteAberto = ''
 lotesEmProcesso = []

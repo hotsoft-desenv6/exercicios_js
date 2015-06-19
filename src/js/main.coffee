@@ -1,6 +1,7 @@
 resetStore = ->
     localStorage.clear()
 
+
 getId = (cod) ->
     id = localStorage.getItem(cod)
     if id == null
@@ -26,11 +27,10 @@ class Amostra
         @result = @exame.result[Math.floor(Math.random() * (@exame.result.length - 1))]
         @alterado = @result not in @exame.ref
         @dataHoraResultado = Date.now()
-        console.log("Amostra: #{@numamostra} - Exame: #{@exame.nome} - Res: #{@result} - Alterasdo: #{@alterado}")
 
 
 class Lote
-    this.a = 0
+
     constructor: (@func) ->
         @timeout_status()
         @amostras = []
@@ -43,45 +43,41 @@ class Lote
     timeout_status: ->
         setTimeout =>
             @set_status()
-        , 18000
+        , 5000
 
     set_status: ->
         if @status == 'CRIADO'
             @status = 'EMPROCESSO'
-            console.log("em processo - #{@numlote}")
-        @processa_amostra()
+            console.log("set_status: #{@status}")
+        @processa_amostra(0)
 
-    processa_amostra: ->
-        console.log( @a + ' - ' + @amostras.length)
-        console.log( @a <= @amostras.length)
-
-        if @a <= @amostras.length
-            setTimeout ->
-                @amostras[@a].set_result()
-                @processa_amostra
-                @a++
-            , Math.floor(Math.random()*7000)
+    processa_amostra: (i) ->
+        if i < @amostras.length
+            am = @amostras[i]
+            setTimeout =>
+                am.set_result()
+                @processa_amostra(++i)
+            , Math.floor(Math.random() * 100)
         else
             @status = 'PRONTO'
-            console.log("pronto - #{@numlote}")
-            @processa_lote()
+            @processa_lote(this)
 
-    processa_lote: ->
-        @func
+    processa_lote: (p) ->
+        @func p
 
 
 loteAberto = ''
 lotesEmProcesso = []
 lotesProntos = []
+parar = true
 
-processa_lote = ->
-    for l in lotesEmProcesso
-        console.log('lote em processo: ' +l.numlote)
-        lotesProntos.push(l)
-        lotesEmProcesso.pop(l)
+processa_lote = (lote) ->
+    i = lotesEmProcesso.indexOf(lote)
+    lotesEmProcesso.pop(lotesProntos.push(lotesEmProcesso[i]))
 
-add_lote = ->
-    new Lote processa_lote
+
+add_lote_aberto = ->
+    loteAberto = new Lote(processa_lote)
 
 add_amostra = ->
     new Amostra
@@ -89,26 +85,33 @@ add_amostra = ->
 add_lote_amostra = ->
     if loteAberto.status == 'EMPROCESSO'
         lotesEmProcesso.push(loteAberto)
-        loteAberto = add_lote()
+        add_lote_aberto()
 
     if loteAberto == ''
-        loteAberto = add_lote()
+        add_lote_aberto()
 
     loteAberto.addAmostra(add_amostra())
 
-    setTimeout(add_lote_amostra, Math.floor(Math.random() * 7000))
-    console.log(loteAberto.numlote)
+    if not parar
+        setTimeout(add_lote_amostra, Math.floor(Math.random() * 3000))
 
 
-add_lote_amostra()
+inicia = ->
+    if parar
+        parar = false
+        add_lote_amostra()
+    else
+        parar = true
+
 
 ########################################################################################################################
 
-###
 
 $(document).ready ->
 #  $('#btnTeste').on('click', $.proxy(cal.fire, this, 'abacate'))
-  $('#btnZerar').click(resetStore)
-  $('#btnAdAmotra').click(inicia)
+    $('#btnAdAmotra').click(inicia)
+    $('#btnZerar').click(resetStore)
 
-###
+
+
+

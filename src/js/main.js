@@ -11,9 +11,9 @@
 
   TEMPO_ADD_AMOSTRA = 3000;
 
-  TEMPO_LOTE_ABERT0 = 5000;
+  TEMPO_LOTE_ABERT0 = 10000;
 
-  TEMPO_PROCESSA_AMOSTRA = 5000;
+  TEMPO_PROCESSA_AMOSTRA = 10000;
 
   log = function(t) {
     return console.log(t);
@@ -128,6 +128,9 @@
             break;
           case EM_PROCESSO:
             add_lote();
+            break;
+          case PRONTO:
+            add_lote();
         }
       } else {
         add_lote();
@@ -187,15 +190,15 @@
     return $('#btnAddAmotra').click(function() {
       inicia();
       if ($(this).text() === 'Iniciar') {
-        return $(this).text('Pausar');
+        return $(this).text('Pausar').removeClass("btn-success").addClass("btn-danger");
       } else {
-        return $(this).text('Iniciar');
+        return $(this).text('Iniciar').removeClass("btn-danger").addClass("btn-success");
       }
     });
   });
 
   add_div_lote = function(l) {
-    $(".lote_aberto").append($(".lote").clone().removeClass("lote").addClass("lote-" + l.numlote));
+    $(".lote_aberto").append($(".lote-ex").clone().removeClass("lote-ex").addClass("lote-" + l.numlote));
     $(".lote-" + l.numlote).find(".lote_tit").text("Lote: " + l.numlote);
     return $(".lote-" + l.numlote).find(".amostras").removeClass("amostras").addClass("amostras-lote-" + l.numlote);
   };
@@ -206,7 +209,8 @@
 
   div_lote_em_processo = function(l) {
     $(".lotes_em_processo").append($(".lote-" + l.numlote));
-    return $(".lote-" + l.numlote).find("tr[name=lote]").append("<th>Resultado</th><th>Alterado</th><th>Data</th>");
+    $(".lote-" + l.numlote).find("tr[name=lote]").append("<th>Resultado</th><th>Data</th>");
+    return $(".lote-" + l.numlote).find("tbody").find("tr").append("<td name='resultado'></td><td name='dt'></td>");
   };
 
   div_lote_pronto = function(l) {
@@ -217,14 +221,14 @@
     var dt;
     if (a.alterado) {
       $(".amostra-" + a.numamostra).addClass("alert alert-danger");
-      $(".lote-" + l.numlote).children("panel-info").removeClass("panel-info").addClass("panel-danger");
+    } else {
+      $(".amostra-" + a.numamostra).addClass("alert alert-success");
     }
     dt = $.format.date(a.dataHoraResultado, 'dd/MM/yyyy HH:mm:ss');
-    $(".amostra-" + a.numamostra).append("<td>" + a.resultado + "</td><td>" + a.alterado + "</td><td>" + dt + "</td>");
-    $("td:contains('true')").text('Sim');
-    return $("td:contains('false')").text('Não');
+    $(".amostra-" + a.numamostra).find("td[name=resultado]").text("" + a.resultado);
+    $(".amostra-" + a.numamostra).find("td[name=dt]").text("" + dt);
+    $("td:contains('true')").text('Positivo');
+    return $("td:contains('false')").text('Negativo');
   };
 
 }).call(this);
-
-//# sourceMappingURL=main.js.map

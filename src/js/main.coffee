@@ -2,6 +2,10 @@ CRIADO = "CRIADO"
 EM_PROCESSO = "EMPROCESSO"
 PRONTO = "PRONTO"
 
+TEMPO_ADD_AMOSTRA = 3000
+TEMPO_LOTE_ABERT0 = 5000
+TEMPO_PROCESSA_AMOSTRA = 5000
+
 log = (t) ->
     console.log(t)
 
@@ -52,30 +56,34 @@ lotes = []
 parar = true
 
 add_lote_amostra = ->
-    if lotes[lotes.length - 1]
-        switch lotes[lotes.length - 1].status
-            when CRIADO
-                add_amostra()
-            when EM_PROCESSO
-                add_lote()
-    else
-        add_lote()
-
     if not parar
-        setTimeout(add_lote_amostra, Math.floor(Math.random() * 7000))
+        if lotes[lotes.length - 1]
+            switch lotes[lotes.length - 1].status
+                when CRIADO
+                    add_amostra()
+                when EM_PROCESSO
+                    add_lote()
+        else
+            add_lote()
+
+        setTimeout(add_lote_amostra, Math.floor(Math.random() * TEMPO_ADD_AMOSTRA))
 
 
 add_lote = ->
     l = lotes[lotes.push(new Lote)-1]
     log('novo lote: '+l.numlote)
+    add_div_lote(l)
 
     i = 0
     processa_amostra = ->
         if i < l.amostras.length
-            l.amostras[i++].set_result()
-            setTimeout(processa_amostra, Math.floor(Math.random() * 3000))
+            a = l.amostras[i++]
+            a.set_result()
+            add_resultado(l, a)
+            setTimeout(processa_amostra, Math.floor(Math.random() * TEMPO_PROCESSA_AMOSTRA))
         else
             l.setStatus(PRONTO)
+            div_lote_pronto(l)
 
         log('lote: '+l.numlote +
             ' - status: '+ l.status +
@@ -85,15 +93,17 @@ add_lote = ->
 
     processa_lote = ->
         l.setStatus(EM_PROCESSO)
+        div_lote_em_processo(l)
         processa_amostra()
 
-    setTimeout(processa_lote, 15000)
+    setTimeout(processa_lote, TEMPO_LOTE_ABERT0)
 
 add_amostra = ->
     lotes[lotes.length - 1].addAmostra(new Amostra())
 
     llote = lotes[lotes.length - 1]
     lamostra = llote.amostras[llote.amostras.length-1]
+    add_div_amostra(llote, lamostra)
 
     log('numlote: '+ llote.numlote +
         ' - numamostra: ' + lamostra.numamostra +
@@ -107,10 +117,41 @@ inicia = ->
     else
         parar = true
 
-
 ########################################################################################################################
 
 $(document).ready ->
 #  $('#btnTeste').on('click', $.proxy(cal.fire, this, 'abacate'))
-    $('#btnAdAmotra').click(inicia)
-    $('#teste').click(resetStore)
+    resetStore()
+    $('#btnAddAmotra').click ->
+        inicia()
+        if $(this).text() == 'Iniciar'
+            $(this).text('Pausar')
+        else
+            $(this).text('Iniciar')
+
+add_div_lote = (l) ->
+    $(".lote_aberto").append($(".lote").clone().removeClass("lote").addClass("lote-#{l.numlote}"))
+    $(".lote-#{l.numlote}").find(".lote_tit").text("Lote: #{l.numlote}")
+    $(".lote-#{l.numlote}").find(".amostras").removeClass("amostras").addClass("amostras-lote-#{l.numlote}")
+
+
+add_div_amostra = (l, a) ->
+    $(".amostras-lote-#{l.numlote}").append("<tr class='amostra-#{a.numamostra}'><td>#{a.numamostra}
+                                                            </td><td>#{a.exame.nome}</td></tr>")
+
+div_lote_em_processo = (l) ->
+    $(".lotes_em_processo").append($(".lote-#{l.numlote}"))
+    $(".lote-#{l.numlote}").find("tr[name=lote]").append("<th>Resultado</th><th>Alterado</th><th>Data</th>")
+
+div_lote_pronto = (l) ->
+    $(".lotes_prontos").append($(".lote-#{l.numlote}"))
+
+add_resultado = (l, a) ->
+    if a.alterado
+        $(".amostra-#{a.numamostra}").addClass("alert alert-danger")
+        $(".lote-#{l.numlote}").children("panel-info").removeClass("panel-info").addClass("panel-danger")
+
+    dt = $.format.date(a.dataHoraResultado, 'dd/MM/yyyy HH:mm:ss')
+    $(".amostra-#{a.numamostra}").append("<td>#{a.resultado}</td><td>#{a.alterado}</td><td>#{dt}</td>")
+    $("td:contains('true')").text('Sim')
+    $("td:contains('false')").text('Não')

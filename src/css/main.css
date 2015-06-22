@@ -2,13 +2,13 @@ body {
     padding-top: 50px;
 }
 
-.starter-template {
-    padding: 40px 15px;
-    text-align: center;
-}
 
-.painel-left {
-    padding: 50px 5px;
+.botoes {
+    padding: 20px 0px;
     text-align: left;
 
+}
+table {
+    text-align: left;
+    font-size: small;
 }

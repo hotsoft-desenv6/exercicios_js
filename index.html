@@ -5,8 +5,11 @@
     <meta charset="utf-8">
 
     <link href="src/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="js/jquery-ui.css">
+    <script src="js/jquery-ui.js"></script>
 
     <script src="js/jquery.js"></script>
+    <script src="js/jquery-dateFormat.min.js"></script>
     <script src="js/bootstrap.js"></script>
 
     <link href="css/bootstrap-theme.min.css" rel="stylesheet">
@@ -41,42 +44,54 @@
 </nav>
 
 <div class="container">
-    <div class="span4">
 
-        <div class="row">
+    <div class="page-header">
+        <h2>Adicionar Amostras</h2>
+    </div>
+
+    <div class="row botoes">
+        <div class="col-lg-4">
             <div class="painel-left">
-                <button id="btnAdAmotra" class="btn-lg btn-primary">Adicionar Amostras</button>
-                <button id="teste" class="btn-lg btn-primary">teste</button>
+                <button id="btnAddAmotra" class="btn-primary btn-lg">Iniciar</button>
             </div>
         </div>
-        <div class="row">
+    </div>
+    <div class="row panel-group">
+        <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Lote Aberto</h3>
                 </div>
-                <div class="panel-body" id="lote_aberto">
+                <div class="panel-body">
+                    <div class="lote_aberto">
 
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="row">
+        <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Lote em processo</h3>
                 </div>
-                <div class="panel-body" id="lotes_em_processo">
+                <div class="panel-body">
+                    <div class="lotes_em_processo">
 
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+
+        <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Resultado Disponível</h3>
                 </div>
-                <div class="panel-body" id="lotes_prontos">
+                <div class="panel-body">
+                    <div class="lotes_prontos">
 
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,23 +103,25 @@
 
 
 <div style="display: none;">
-    <div  class="panel-info lote">
-        <div id="loteAbertoInfo" class="panel-heading">
-            <h4 id="lote_tit" class="panel-title"></h4>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-responsive">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Exame</th>
-                </tr>
-                </thead>
-                <tbody id="loteaberto">
+    <div class="lote">
+        <div class="panel-info">
+            <div class="panel-heading">
+                <h4 class="panel-title lote_tit"></h4>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr name="lote">
+                        <th>#</th>
+                        <th>Exame</th>
+                    </tr>
+                    </thead>
+                    <tbody class="amostras">
 
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
